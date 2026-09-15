@@ -46,11 +46,11 @@
             background-size: cover;
             background-position: center;
             color: #FFFFFF;
-            padding: 3rem 1rem;
+            padding: 2.5rem 1rem;
         }
 
         header h1 {
-            font-size: 2.8rem;
+            font-size: 2.4rem;
             margin: 0;
             font-family: 'Playfair Display', serif;
             letter-spacing: 1px;
@@ -58,8 +58,8 @@
         }
 
         header p {
-            font-size: 1rem;
-            margin-top: 10px;
+            font-size: 0.9rem;
+            margin-top: 5px;
             font-weight: 300;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -69,50 +69,51 @@
             background-color: var(--primary-navy);
             color: white;
             padding: 10px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 500;
             margin: 0;
         }
 
+        /* --- CAMBIO PRINCIPAL AQUI: DE FLEX A GRID DE 2 COLUMNAS --- */
         .container {
             padding: 20px 15px;
-            display: flex;
-            flex-direction: column; /* Una sola columna obligatoria */
-            gap: 25px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 columnas del mismo ancho */
+            gap: 15px; /* Espacio entre tarjetas */
         }
 
         .card {
             background-color: var(--card-bg);
-            border-radius: 15px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 6px 15px rgba(44, 62, 80, 0.08);
+            box-shadow: 0 4px 10px rgba(44, 62, 80, 0.06);
             border: 2px solid transparent;
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
+            display: flex;
+            flex-direction: column; /* Para que el contenido se estire uniformemente */
         }
 
-        /* Estilo cuando el producto está seleccionado */
         .card.selected {
             border: 2px solid var(--wa-color);
-            transform: scale(1.02);
-            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.2);
+            transform: translateY(-3px); /* Pequeño salto dinámico en lugar de scale */
+            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.25);
         }
 
-        /* Indicador visual de selección */
         .check-icon {
             position: absolute;
-            top: 15px;
-            right: 15px;
+            top: 10px;
+            right: 10px;
             background-color: var(--wa-color);
             color: white;
-            width: 35px;
-            height: 35px;
+            width: 28px; /* Más pequeño para que no tape tanta foto */
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 0.9rem;
             opacity: 0;
             transform: scale(0);
             transition: all 0.3s ease;
@@ -126,65 +127,74 @@
 
         .product-img {
             width: 100%;
-            aspect-ratio: 1 / 1; /* RELACIÓN DE ASPECTO 1:1 (CUADRADA) */
+            aspect-ratio: 1 / 1;
             object-fit: cover; 
             border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
         .card-content {
-            padding: 20px 15px;
+            padding: 12px 10px; /* Reducido por el nuevo tamaño */
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1; /* Permite que la tarjeta ocupe el alto disponible */
         }
 
         .card h2 {
             color: var(--primary-navy);
-            font-size: 1.5rem;
+            font-size: 1.1rem; /* Letra más pequeña */
             font-family: 'Playfair Display', serif;
-            margin: 0 0 10px 0;
+            margin: 0 0 8px 0;
+            line-height: 1.2;
         }
 
         .badges {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 15px;
+            flex-wrap: wrap; /* Si las pantallas son pequeñas, se acomodan solas */
+            gap: 5px;
+            margin-bottom: 10px;
         }
 
         .badge {
             background-color: rgba(120, 149, 171, 0.15);
             color: var(--primary-navy);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
+            padding: 3px 8px; /* Pastillas más pequeñas */
+            border-radius: 15px;
+            font-size: 0.65rem;
             font-weight: 600;
             border: 1px solid var(--pastel-navy);
         }
 
         .details {
-            font-size: 0.9rem;
+            font-size: 0.75rem; /* Texto descriptivo más pequeño */
             color: var(--text-main);
             margin: 0;
-            line-height: 1.5;
+            line-height: 1.4;
+            /* Opcional: Esto trunca el texto a 3 líneas para que las tarjetas queden del mismo tamaño siempre */
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         footer {
-            margin-top: 20px;
-            padding: 25px 15px;
+            margin-top: 10px;
+            padding: 20px 15px 40px;
             background-color: var(--primary-navy);
             color: var(--bg-color);
             font-size: 0.85rem;
             font-weight: 300;
         }
 
-        /* Contenedor del Botón Fijo Inferior */
         .bottom-bar {
             position: fixed;
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
-            max-width: 480px; /* Mismo ancho del body */
+            max-width: 480px;
             background-color: white;
-            padding: 15px 20px;
+            padding: 12px 15px;
             box-sizing: border-box;
             box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
             z-index: 100;
@@ -194,10 +204,10 @@
 
         .btn-global {
             width: 100%;
-            padding: 16px;
+            padding: 14px;
             border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
+            border-radius: 10px;
+            font-size: 1rem;
             font-weight: 600;
             color: white;
             background: linear-gradient(135deg, var(--wa-color), var(--wa-dark));
@@ -205,11 +215,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             transition: all 0.3s ease;
         }
 
-        /* Estilo cuando el botón está deshabilitado */
         .btn-global:disabled {
             background: #cbd5e1;
             color: #94a3b8;
@@ -241,7 +250,7 @@
                     <span class="badge">750 ml</span>
                     <span class="badge">12% Alc.</span>
                 </div>
-                <p class="details">El equilibrio perfecto entre la tradición vinícola y el intenso aroma del grano colombiano.</p>
+                <p class="details">El equilibrio perfecto entre la tradición vinícola y el intenso aroma del grano.</p>
             </div>
         </div>
 
@@ -255,7 +264,7 @@
                     <span class="badge">750 ml</span>
                     <span class="badge">12% Alc.</span>
                 </div>
-                <p class="details">Con un toque ligeramente dulce, ideal para celebraciones, aniversarios o para disfrutar de un buen momento.</p>
+                <p class="details">Un toque dulce, ideal para celebraciones o disfrutar de un buen momento.</p>
             </div>
         </div>
 
@@ -269,7 +278,7 @@
                     <span class="badge">750 ml</span>
                     <span class="badge">12% Alc.</span>
                 </div>
-                <p class="details">Fresco, vibrante y visualmente cautivador. Un producto artesanal con notas afrutadas.</p>
+                <p class="details">Fresco, vibrante y visualmente cautivador con notas afrutadas.</p>
             </div>
         </div>
 
@@ -283,7 +292,7 @@
                     <span class="badge">750 ml</span>
                     <span class="badge">12% Alc.</span>
                 </div>
-                <p class="details">Suave, dulce y seductora con el auténtico sabor del café. Textura cremosa inigualable.</p>
+                <p class="details">Suave y dulce con el auténtico sabor del café. Textura cremosa.</p>
             </div>
         </div>
     </div>
@@ -301,30 +310,25 @@
     </div>
 
     <script>
-        // Variables para guardar la elección del usuario
         let productoElegido = null;
         let descripcionElegida = null;
 
         function seleccionarProducto(tarjeta, nombre, descripcion) {
-            // 1. Quitar la selección visual de todas las tarjetas
             const todasLasTarjetas = document.querySelectorAll('.card');
             todasLasTarjetas.forEach(t => t.classList.remove('selected'));
 
-            // 2. Agregar la selección visual a la tarjeta tocada
             tarjeta.classList.add('selected');
 
-            // 3. Guardar los datos del producto
             productoElegido = nombre;
             descripcionElegida = descripcion;
 
-            // 4. Activar el botón inferior y cambiar su texto
             const btn = document.getElementById('btnWhatsApp');
             btn.disabled = false;
             btn.innerHTML = `<i class="fa-brands fa-whatsapp"></i> Comprar ${nombre}`;
         }
 
         function enviarWhatsApp() {
-            if (!productoElegido) return; // Si no hay producto, no hace nada
+            if (!productoElegido) return; 
 
             const numeroWhatsApp = '573154044392';
             const mensaje = `¡Hola! Deseo adquirir este producto:\n\n🍷 *${productoElegido}*\n📏 *Volumen:* 750ml\n🍾 *Alcohol:* 12% Alc. Vol.\n📝 *Detalles:* ${descripcionElegida}\n\n¿Me indicas los pasos para realizar la compra?`;
