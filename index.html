@@ -2,266 +2,288 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Dulce Pecado | Vinos Artesanales</title>
     
-    <!-- Integración de Google Fonts -->
+    <!-- Fuentes y Atajos -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome para el ícono de WhatsApp -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            /* Paleta basada en azul marino pastel y combinaciones elegantes */
-            --primary-navy: #2C3E50;      /* Azul marino profundo para textos y footer */
-            --pastel-navy: #7895AB;       /* Azul marino pastel para acentos y badges */
-            --bg-color: #F0F4F8;          /* Fondo principal gris/azul muy suave */
+            --primary-navy: #2C3E50;
+            --pastel-navy: #7895AB;
+            --bg-color: #F0F4F8;
             --card-bg: #FFFFFF;
             --text-main: #4A5568;
-            --wa-gradient-1: #25D366;
-            --wa-gradient-2: #128C7E;
+            --wa-color: #25D366;
+            --wa-dark: #128C7E;
         }
         
+        /* Forzar vista móvil centrada */
+        html {
+            background-color: #e0e5ec;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            margin: 0;
+            margin: 0 auto;
             padding: 0;
+            padding-bottom: 90px; /* Espacio para el botón flotante */
             text-align: center;
+            max-width: 480px; /* Limita el ancho al tamaño de un celular */
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            min-height: 100vh;
+            position: relative;
         }
 
         header {
-            /* Degradado azul marino superpuesto a la imagen de fondo */
             background-image: linear-gradient(rgba(44, 62, 80, 0.85), rgba(120, 149, 171, 0.75)), url('IMG-20260915-WA0014.jpg');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed; /* Efecto parallax suave */
             color: #FFFFFF;
-            padding: 4rem 1rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 3rem 1rem;
         }
 
         header h1 {
-            font-size: 3.5rem;
+            font-size: 2.8rem;
             margin: 0;
             font-family: 'Playfair Display', serif;
             letter-spacing: 1px;
-            text-shadow: 2px 4px 8px rgba(0,0,0,0.3);
+            text-shadow: 2px 4px 8px rgba(0,0,0,0.4);
         }
 
         header p {
-            font-size: 1.3rem;
-            margin-top: 15px;
+            font-size: 1rem;
+            margin-top: 10px;
             font-weight: 300;
-            letter-spacing: 2px;
-            opacity: 0.95;
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
 
+        .instruccion {
+            background-color: var(--primary-navy);
+            color: white;
+            padding: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin: 0;
+        }
+
         .container {
-            max-width: 1200px;
-            margin: -40px auto 3rem auto; /* Sube ligeramente sobre el header */
-            padding: 0 1.5rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px;
-            position: relative;
-            z-index: 10;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column; /* Una sola columna obligatoria */
+            gap: 25px;
         }
 
         .card {
             background-color: var(--card-bg);
-            border-radius: 20px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(44, 62, 80, 0.08);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            flex-direction: column;
-            border: 1px solid rgba(120, 149, 171, 0.15);
+            box-shadow: 0 6px 15px rgba(44, 62, 80, 0.08);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
         }
 
-        .card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 15px 40px rgba(44, 62, 80, 0.15);
+        /* Estilo cuando el producto está seleccionado */
+        .card.selected {
+            border: 2px solid var(--wa-color);
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.2);
+        }
+
+        /* Indicador visual de selección */
+        .check-icon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--wa-color);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .card.selected .check-icon {
+            opacity: 1;
+            transform: scale(1);
         }
 
         .product-img {
             width: 100%;
-            height: 350px;
+            aspect-ratio: 1 / 1; /* RELACIÓN DE ASPECTO 1:1 (CUADRADA) */
             object-fit: cover; 
-            transition: transform 0.5s ease;
-        }
-
-        .card:hover .product-img {
-            transform: scale(1.05);
-        }
-
-        .img-container {
-            overflow: hidden;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
         .card-content {
-            padding: 25px 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            background: linear-gradient(to bottom, #ffffff, #fcfcfc);
+            padding: 20px 15px;
         }
 
         .card h2 {
             color: var(--primary-navy);
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-family: 'Playfair Display', serif;
-            margin: 0 0 15px 0;
+            margin: 0 0 10px 0;
         }
 
         .badges {
             display: flex;
             justify-content: center;
-            gap: 12px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
         }
 
         .badge {
             background-color: rgba(120, 149, 171, 0.15);
             color: var(--primary-navy);
-            padding: 6px 14px;
-            border-radius: 30px;
-            font-size: 0.8rem;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
             font-weight: 600;
-            letter-spacing: 0.5px;
             border: 1px solid var(--pastel-navy);
         }
 
         .details {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: var(--text-main);
-            margin-bottom: 25px;
-            line-height: 1.6;
-            flex-grow: 1;
-        }
-
-        .btn-comprar {
-            background: linear-gradient(135deg, var(--wa-gradient-1), var(--wa-gradient-2));
-            color: white;
-            border: none;
-            padding: 16px 20px;
-            font-size: 1.05rem;
-            font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .btn-comprar:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
-            background: linear-gradient(135deg, #1ebc5a, #0f7669);
+            margin: 0;
+            line-height: 1.5;
         }
 
         footer {
-            margin-top: 60px;
-            padding: 30px;
+            margin-top: 20px;
+            padding: 25px 15px;
             background-color: var(--primary-navy);
             color: var(--bg-color);
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             font-weight: 300;
-            letter-spacing: 1px;
         }
 
-        footer p {
-            margin: 5px 0;
+        /* Contenedor del Botón Fijo Inferior */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px; /* Mismo ancho del body */
+            background-color: white;
+            padding: 15px 20px;
+            box-sizing: border-box;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+            z-index: 100;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
         }
+
+        .btn-global {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--wa-color), var(--wa-dark));
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        /* Estilo cuando el botón está deshabilitado */
+        .btn-global:disabled {
+            background: #cbd5e1;
+            color: #94a3b8;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
     </style>
 </head>
 <body>
 
     <header>
         <h1>Dulce Pecado</h1>
-        <p>Vinos Artesanales • Hechos en Colombia</p>
+        <p>Vinos Artesanales • Colombia</p>
     </header>
+    
+    <div class="instruccion">
+        Selecciona un producto para comprar 👇
+    </div>
 
     <div class="container">
         <!-- Vino de Café -->
-        <div class="card">
-            <div class="img-container">
-                <img src="vino-cafe.jpg" alt="Vino de Café" class="product-img" onerror="this.src='https://via.placeholder.com/400x500/2C3E50/F0F4F8?text=Vino+de+Café'">
-            </div>
+        <div class="card" onclick="seleccionarProducto(this, 'Vino de Café', 'El equilibrio perfecto entre la tradición vinícola y el intenso aroma del grano colombiano.')">
+            <div class="check-icon"><i class="fa-solid fa-check"></i></div>
+            <img src="vino-cafe.jpg" alt="Vino de Café" class="product-img" onerror="this.src='https://via.placeholder.com/800x800/2C3E50/F0F4F8?text=1:1+Vino+de+Café'">
             <div class="card-content">
                 <h2>Vino de Café</h2>
                 <div class="badges">
                     <span class="badge">750 ml</span>
-                    <span class="badge">12% Alc. Vol.</span>
+                    <span class="badge">12% Alc.</span>
                 </div>
-                <p class="details">El equilibrio perfecto entre la tradición vinícola y el intenso aroma del grano colombiano. Un producto 100% artesanal con carácter único.</p>
-                <button class="btn-comprar" onclick="comprarPorWhatsApp('Vino de Café', 'El equilibrio perfecto entre la tradición vinícola y el intenso aroma del grano colombiano.')">
-                    <i class="fa-brands fa-whatsapp"></i> Comprar ahora
-                </button>
+                <p class="details">El equilibrio perfecto entre la tradición vinícola y el intenso aroma del grano colombiano.</p>
             </div>
         </div>
 
         <!-- Vino Abocado -->
-        <div class="card">
-            <div class="img-container">
-                <img src="vino-abocado.jpg" alt="Vino Abocado" class="product-img" onerror="this.src='https://via.placeholder.com/400x500/2C3E50/F0F4F8?text=Vino+Abocado'">
-            </div>
+        <div class="card" onclick="seleccionarProducto(this, 'Vino Abocado', 'Con un toque ligeramente dulce, ideal para celebraciones o disfrutar de un buen momento.')">
+            <div class="check-icon"><i class="fa-solid fa-check"></i></div>
+            <img src="vino-abocado.jpg" alt="Vino Abocado" class="product-img" onerror="this.src='https://via.placeholder.com/800x800/2C3E50/F0F4F8?text=1:1+Vino+Abocado'">
             <div class="card-content">
                 <h2>Vino Abocado</h2>
                 <div class="badges">
                     <span class="badge">750 ml</span>
-                    <span class="badge">12% Alc. Vol.</span>
+                    <span class="badge">12% Alc.</span>
                 </div>
-                <p class="details">Con un toque ligeramente dulce, este vino es ideal para celebraciones, aniversarios o para disfrutar de un buen momento. Suavidad garantizada.</p>
-                <button class="btn-comprar" onclick="comprarPorWhatsApp('Vino Abocado', 'Con un toque ligeramente dulce, ideal para celebraciones o disfrutar de un buen momento. Suavidad garantizada.')">
-                    <i class="fa-brands fa-whatsapp"></i> Comprar ahora
-                </button>
+                <p class="details">Con un toque ligeramente dulce, ideal para celebraciones, aniversarios o para disfrutar de un buen momento.</p>
             </div>
         </div>
 
         <!-- Vino Rosado -->
-        <div class="card">
-            <div class="img-container">
-                <img src="vino-rosado.jpg" alt="Vino Rosado" class="product-img" onerror="this.src='https://via.placeholder.com/400x500/2C3E50/F0F4F8?text=Vino+Rosado'">
-            </div>
+        <div class="card" onclick="seleccionarProducto(this, 'Vino Rosado', 'Fresco, vibrante y visualmente cautivador. Un producto con notas afrutadas.')">
+            <div class="check-icon"><i class="fa-solid fa-check"></i></div>
+            <img src="vino-rosado.jpg" alt="Vino Rosado" class="product-img" onerror="this.src='https://via.placeholder.com/800x800/2C3E50/F0F4F8?text=1:1+Vino+Rosado'">
             <div class="card-content">
                 <h2>Vino Rosado</h2>
                 <div class="badges">
                     <span class="badge">750 ml</span>
-                    <span class="badge">12% Alc. Vol.</span>
+                    <span class="badge">12% Alc.</span>
                 </div>
-                <p class="details">Fresco, vibrante y visualmente cautivador. Un producto artesanal con notas afrutadas que marida perfecto en cualquier tarde.</p>
-                <button class="btn-comprar" onclick="comprarPorWhatsApp('Vino Rosado', 'Fresco, vibrante y visualmente cautivador. Con notas afrutadas que marida perfecto en cualquier tarde.')">
-                    <i class="fa-brands fa-whatsapp"></i> Comprar ahora
-                </button>
+                <p class="details">Fresco, vibrante y visualmente cautivador. Un producto artesanal con notas afrutadas.</p>
             </div>
         </div>
 
         <!-- Crema de Café -->
-        <div class="card">
-            <div class="img-container">
-                <img src="crema-cafe.jpg" alt="Crema de Café" class="product-img" onerror="this.src='https://via.placeholder.com/400x500/2C3E50/F0F4F8?text=Crema+de+Café'">
-            </div>
+        <div class="card" onclick="seleccionarProducto(this, 'Crema de Café', 'Suave, dulce y seductora con el auténtico sabor del café y textura inigualable.')">
+            <div class="check-icon"><i class="fa-solid fa-check"></i></div>
+            <img src="crema-cafe.jpg" alt="Crema de Café" class="product-img" onerror="this.src='https://via.placeholder.com/800x800/2C3E50/F0F4F8?text=1:1+Crema+de+Café'">
             <div class="card-content">
                 <h2>Crema de Café</h2>
                 <div class="badges">
                     <span class="badge">750 ml</span>
-                    <span class="badge">12% Alc. Vol.</span>
+                    <span class="badge">12% Alc.</span>
                 </div>
-                <p class="details">Suave, dulce y seductora con el auténtico sabor del café. Una textura cremosa inigualable, elaborada en Colombia con altos estándares.</p>
-                <button class="btn-comprar" onclick="comprarPorWhatsApp('Crema de Café', 'Suave, dulce y seductora con el auténtico sabor del café. Una textura cremosa inigualable.')">
-                    <i class="fa-brands fa-whatsapp"></i> Comprar ahora
-                </button>
+                <p class="details">Suave, dulce y seductora con el auténtico sabor del café. Textura cremosa inigualable.</p>
             </div>
         </div>
     </div>
@@ -271,142 +293,42 @@
         <p>Hecho en Colombia • Producto Artesanal</p>
     </footer>
 
-    <script>
-        function comprarPorWhatsApp(nombreProducto, descripcion) {
-            const numeroWhatsApp = '573154044392';
-            const mensaje = `¡Hola! Deseo adquirir este producto:\n\n🍷 *${nombreProducto}*\n📏 *Volumen:* 750ml\n🍾 *Alcohol:* 12% Alc. Vol.\n📝 *Detalles:* ${descripcion}\n\n¿Me indicas los pasos para realizar la compra?`;
-            const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
-            window.open(url, '_blank');
-        }
-    </script>
-</body>
-</html>            font-weight: bold;
-        }
-
-        .details {
-            font-size: 0.95rem;
-            color: #555;
-            margin-bottom: 20px;
-            line-height: 1.5;
-            flex-grow: 1;
-        }
-
-        .btn-comprar {
-            background-color: #25D366;
-            color: white;
-            border: none;
-            padding: 15px 20px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn-comprar:hover {
-            background-color: #1ebc5a;
-            transform: scale(1.02);
-        }
-
-        footer {
-            margin-top: 50px;
-            padding: 25px;
-            background-color: var(--primary-color);
-            color: var(--secondary-color);
-            font-size: 0.9rem;
-        }
-    </style>
-</head>
-<body>
-
-    <header>
-        <h1>Dulce Pecado</h1>
-        <p>Vinos Artesanales • Hechos en Colombia</p>
-    </header>
-
-    <div class="container">
-        <!-- Vino de Café -->
-        <div class="card">
-            <img src="vino-cafe.jpg" alt="Vino de Café" class="product-img" onerror="this.src='https://via.placeholder.com/400x500/3b2818/f4e8d3?text=Vino+de+Café'">
-            <div class="card-content">
-                <h2>Vino de Café</h2>
-                <div class="badges">
-                    <span class="badge">750 ml</span>
-                    <span class="badge">12% Alc. Vol.</span>
-                </div>
-                <p class="details">El equilibrio perfecto entre la tradición vinícola y el intenso aroma del grano colombiano. Un producto 100% artesanal con carácter único.</p>
-                <!-- Fíjate cómo aquí le pasamos el nombre Y la descripción al botón -->
-                <button class="btn-comprar" onclick="comprarPorWhatsApp('Vino de Café', 'El equilibrio perfecto entre la tradición vinícola y el intenso aroma del grano colombiano.')">
-                    Comprar 
-                </button>
-            </div>
-        </div>
-
-        <!-- Vino Abocado -->
-        <div class="card">
-            <img src="vino-abocado.jpg" alt="Vino Abocado" class="product-img" onerror="this.src='https://via.placeholder.com/400x500/3b2818/f4e8d3?text=Vino+Abocado'">
-            <div class="card-content">
-                <h2>Vino Abocado</h2>
-                <div class="badges">
-                    <span class="badge">750 ml</span>
-                    <span class="badge">12% Alc. Vol.</span>
-                </div>
-                <p class="details">Con un toque ligeramente dulce, este vino es ideal para celebraciones, aniversarios o para disfrutar de un buen momento. Suavidad garantizada.</p>
-                <button class="btn-comprar" onclick="comprarPorWhatsApp('Vino Abocado', 'Con un toque ligeramente dulce, ideal para celebraciones o disfrutar de un buen momento. Suavidad garantizada.')">
-                    Comprar
-                </button>
-            </div>
-        </div>
-
-        <!-- Vino Rosado -->
-        <div class="card">
-            <img src="vino-rosado.jpg" alt="Vino Rosado" class="product-img" onerror="this.src='https://via.placeholder.com/400x500/3b2818/f4e8d3?text=Vino+Rosado'">
-            <div class="card-content">
-                <h2>Vino Rosado</h2>
-                <div class="badges">
-                    <span class="badge">750 ml</span>
-                    <span class="badge">12% Alc. Vol.</span>
-                </div>
-                <p class="details">Fresco, vibrante y visualmente cautivador. Un producto artesanal con notas afrutadas que marida perfecto en cualquier tarde.</p>
-                <button class="btn-comprar" onclick="comprarPorWhatsApp('Vino Rosado', 'Fresco, vibrante y visualmente cautivador. Con notas afrutadas que marida perfecto en cualquier tarde.')">
-                    Comprar
-                </button>
-            </div>
-        </div>
-
-        <!-- Crema de Café -->
-        <div class="card">
-            <img src="crema-cafe.jpg" alt="Crema de Café" class="product-img" onerror="this.src='https://via.placeholder.com/400x500/3b2818/f4e8d3?text=Crema+de+Café'">
-            <div class="card-content">
-                <h2>Crema de Café</h2>
-                <div class="badges">
-                    <span class="badge">750 ml</span>
-                    <span class="badge">12% Alc. Vol.</span>
-                </div>
-                <p class="details">Suave, dulce y seductora con el auténtico sabor del café. Una textura cremosa inigualable, elaborada en Colombia con altos estándares artesanales.</p>
-                <button class="btn-comprar" onclick="comprarPorWhatsApp('Crema de Café', 'Suave, dulce y seductora con el auténtico sabor del café. Una textura cremosa inigualable.')">
-                    Comprar
-                </button>
-            </div>
-        </div>
+    <!-- Barra inferior fija con el botón de WhatsApp -->
+    <div class="bottom-bar">
+        <button id="btnWhatsApp" class="btn-global" disabled onclick="enviarWhatsApp()">
+            <i class="fa-brands fa-whatsapp"></i> Selecciona un producto
+        </button>
     </div>
 
-    <footer>
-        <p>Dulce Pecado © 2026 - Hecho en Colombia • Producto Artesanal</p>
-    </footer>
-
     <script>
-        // Esta función ahora recibe el nombre y la descripción para armar un mensaje completo
-        function comprarPorWhatsApp(nombreProducto, descripcion) {
+        // Variables para guardar la elección del usuario
+        let productoElegido = null;
+        let descripcionElegida = null;
+
+        function seleccionarProducto(tarjeta, nombre, descripcion) {
+            // 1. Quitar la selección visual de todas las tarjetas
+            const todasLasTarjetas = document.querySelectorAll('.card');
+            todasLasTarjetas.forEach(t => t.classList.remove('selected'));
+
+            // 2. Agregar la selección visual a la tarjeta tocada
+            tarjeta.classList.add('selected');
+
+            // 3. Guardar los datos del producto
+            productoElegido = nombre;
+            descripcionElegida = descripcion;
+
+            // 4. Activar el botón inferior y cambiar su texto
+            const btn = document.getElementById('btnWhatsApp');
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fa-brands fa-whatsapp"></i> Comprar ${nombre}`;
+        }
+
+        function enviarWhatsApp() {
+            if (!productoElegido) return; // Si no hay producto, no hace nada
+
             const numeroWhatsApp = '573154044392';
+            const mensaje = `¡Hola! Deseo adquirir este producto:\n\n🍷 *${productoElegido}*\n📏 *Volumen:* 750ml\n🍾 *Alcohol:* 12% Alc. Vol.\n📝 *Detalles:* ${descripcionElegida}\n\n¿Me indicas los pasos para realizar la compra?`;
             
-            // Creamos un mensaje formateado con viñetas y espacios
-            const mensaje = `¡Hola! Deseo adquirir este producto:\n\n🍷 *${nombreProducto}*\n📏 *Volumen:* 750ml\n🍾 *Alcohol:* 12% Alc. Vol.\n📝 *Detalles:* ${descripcion}\n\n¿Me indicas los pasos para realizar la compra?`;
-            
-            // Convertimos el texto al formato de enlaces web y abrimos WhatsApp
             const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
             window.open(url, '_blank');
         }
